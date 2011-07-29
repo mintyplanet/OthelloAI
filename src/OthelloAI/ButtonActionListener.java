@@ -16,7 +16,7 @@ public final class ButtonActionListener extends Observable implements ActionList
 		System.out.print(x);
 		System.out.print(y);
 		System.out.println(board.getPosition(x, y));
-		board.setPosition(x,y, board.isHumansTurn()?Piece.WHITE:Piece.BLACK);
+		board.setPosition(x,y, board.isPlayersTurn()?Piece.WHITE:Piece.BLACK);
 		setChanged();
 		notifyObservers();
 
