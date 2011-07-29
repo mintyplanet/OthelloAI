@@ -1,4 +1,4 @@
-package OthelloAI;
+package othelloAI;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,6 +18,7 @@ public class OthelloButton extends JButton {
 	public OthelloButton(Board.Piece p){
 		super();
 		setPiece(p);
+		setPreferredSize(new java.awt.Dimension(64,64));
 	}
 		
 	public void setPiece(Board.Piece p){
