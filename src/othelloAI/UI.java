@@ -1,7 +1,6 @@
 package othelloAI;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,15 +14,14 @@ public final class UI extends JFrame{
 	private final OthelloButton[][] pieces;
 	private final Board board;
 	private final int dimension;
-	private final Game game;
-	private final JLabel message = new JLabel("Your turn.");
+	private final JLabel message;
 		
 	public UI(Board b, Game game) {
 		super("Othello GUI");
 		this.setResizable(false);
-		this.game = game;
 		board = b;
-		dimension = b.getDimension();		
+		dimension = b.getDimension();
+		message = new JLabel(board.getCurrentPlayer().toString() + "`s turn.");
 		Box box = Box.createVerticalBox();
 		
 		JPanel boardPanel = new JPanel(new GridLayout(dimension, dimension));
@@ -51,8 +49,12 @@ public final class UI extends JFrame{
 				pieces[x][y].setPiece(board.getPosition(x,y));
 			}
 		}
-		message.setText(game.getCurrentPlayer().toString() + "`s turn.");
+		message.setText(board.getCurrentPlayer().toString() + "`s turn.");
 	}
+	
+	public void setMessage(String string){
+		message.setText(string);
+		}
 
 	public void togglePause() {
 		for(OthelloButton[] obs:pieces){
