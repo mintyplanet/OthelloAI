@@ -1,7 +1,6 @@
 package othelloAI;
 
 import java.util.ArrayList;
-import java.util.Observable;
 import java.awt.Point;
 
 public class Board{
@@ -9,11 +8,11 @@ public class Board{
 	public static enum Piece{
 		BLACK,
 		WHITE,
-		EMPTY
-	}
+		EMPTY;
+		public String toString(){return this.name().toLowerCase();}}
 	
-	private int dimension;	
-	private Piece[] board;
+	private final byte dimension;	
+	private final Piece[] board;
 		
 	private static final int[][] directions = 
 	{
@@ -23,7 +22,7 @@ public class Board{
 	};
 
 	public Board(int dimension){
-		this.dimension = dimension;
+		this.dimension = (byte) dimension;
 		board = new Piece[dimension * dimension];
 		//Initial Position
 		java.util.Arrays.fill(board, Piece.EMPTY);		
@@ -65,6 +64,25 @@ public class Board{
 			}
 		}
 		return true;
+	}
+	public ArrayList<Point> availablePositions(){
+		ArrayList<Point> pointList = new ArrayList<Point>();
+		for(int i=0; i<dimension; i++){
+			if (board[i]==Piece.EMPTY)pointList.add(toPoint(i));
+		}
+		return pointList;
+	}
+	private Point toPoint(int i) {
+		return new Point(i/dimension,i%dimension);
+	}
+
+	public int heuristicWinning(){
+		int count = 0;
+		for(Piece p:board){
+			if(p==Piece.WHITE)count++;
+			if(p==Piece.BLACK)count--;
+		}
+		return count;
 	}
 	
 	private boolean isValidPosition(int x, int y){
@@ -136,7 +154,9 @@ public class Board{
 	}
 
 	public Piece winner() {
-		// TODO Auto-generated method stub
-		return null;
+		int count = heuristicWinning();
+		if(count>0)return Piece.WHITE;
+		if(count<0)return Piece.BLACK;
+		else return Piece.EMPTY;
 	}
 }
