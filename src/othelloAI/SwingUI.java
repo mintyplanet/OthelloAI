@@ -6,17 +6,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import java.awt.GridLayout;
-import java.awt.Menu;
-import java.awt.MenuBar;
-import java.awt.MenuItem;
+//import java.awt.Menu;
+//import java.awt.MenuBar;
+//import java.awt.MenuItem;
 
-public final class UI extends JFrame{
+public final class SwingUI extends JFrame implements GUI{
 	private final OthelloButton[][] pieces;
 	private final Board board;
 	private final int dimension;
 	private final JLabel message;
 		
-	public UI(Board b, Game game) {
+	public SwingUI(Board b, Game game) {
 		super("Othello GUI");
 		this.setResizable(false);
 		board = b;
@@ -43,6 +43,7 @@ public final class UI extends JFrame{
 		setVisible(true);
 	}
 	
+	@Override
 	public void draw() {
 		for(int y=0; y < dimension; y++){
 			for(int x=0; x < dimension; x++){
@@ -52,10 +53,12 @@ public final class UI extends JFrame{
 		message.setText(board.getCurrentPlayer().toString() + "`s turn.");
 	}
 	
-	public void setMessage(String string){
+	@Override
+	public void showMessage(String string){
 		message.setText(string);
 		}
 
+	@Override
 	public void togglePause() {
 		for(OthelloButton[] obs:pieces){
 			for(OthelloButton ob:obs){

@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.plaf.SliderUI;
+import javax.swing.JOptionPane;
 
 import othelloAI.Board.Piece;
 
@@ -15,37 +15,43 @@ public class Game implements Observer{
 	int DIMENSION = 8;
 	
 	private final Board board;
-	private final UI gui;
+	private final GUI gui;
 	private final AI ai;
-	private Thread aiThread;
-	
+	private final Piece aiPlayer;
+
 	public Game(){
-		board = new Board(DIMENSION, Piece.WHITE);//Who makes the first move. Prompt the user for this
-		gui = new UI(board, this);
-		ai = new AI(board, Piece.BLACK);
+		Piece[] players = {Piece.BLACK,Piece.WHITE};
+		Piece p = (Piece) JOptionPane.showInputDialog(null, "White plays first.", "Choose your colour", 
+				 1, null, players, Piece.WHITE);
+		aiPlayer = Board.opponent(Piece.WHITE);
+		board = new Board(DIMENSION, p);
+		gui = new SwingUI(board, this);
+		ai = new AI(board, Board.opponent(p));
 		ai.addObserver(this);
 		
-		aiThread = new Thread(ai);
+		advanceGame();
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		if (board.move((Point)arg)){
-			advanceGame();			
+		board.rotatePlayer();
+		advanceGame();			
 		}
 	}
 	private void advanceGame() {
-		board.rotatePlayer();
 		gui.draw();	
-		gui.togglePause();
+		//gui.togglePause();
+		if (board.availablePositions().isEmpty()){
+			board.rotatePlayer();
+			gui.showMessage("No place to move. Pass");
+		}
 		if (board.isGameOver()){
-			gui.setMessage("Game over. " + board.winner() + " is the winner!");
+			gui.showMessage("Game over. " + board.winner() + " is the winner!");
 		}
-		else if(board.getCurrentPlayer() == Piece.BLACK){ //TODO if AI
-			//ai.makeMove();
-			aiThread.start();
+		else if(board.getCurrentPlayer() == aiPlayer){
+			new Thread(ai).start();
 		}
-		else{aiThread = new Thread(ai);}
 		
 	}
 
