@@ -56,6 +56,9 @@ public class AI extends Observable implements Runnable {
 			gamestate.move(avail.get(i));
 			gamestate.rotatePlayer();
 			int score = minimaxAB(gamestate, MAXDEPTH, java.lang.Integer.MIN_VALUE, java.lang.Integer.MAX_VALUE);
+
+			System.out.print("smallest:"+smallest);
+			System.out.println("minimax:"+score);
 			if (smallest>score){
 				smallest = score;
 				smallestIndex = i;
@@ -75,9 +78,8 @@ public class AI extends Observable implements Runnable {
 			gamestate.move(avail.get(i));
 			//gamestate.rotatePlayer();
 			int score = minimax(gamestate, MAXDEPTH);
-
-			System.out.print("smallest:"+smallest);
-			System.out.println("minimax:"+score);
+System.out.print("smallest:"+smallest);
+System.out.println("minimax:"+score);
 			if (smallest>score){
 				System.out.println("HA!");
 				smallest = score;
